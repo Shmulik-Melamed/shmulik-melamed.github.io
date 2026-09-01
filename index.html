@@ -4,6 +4,12 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Shmulik Melamed | Dangot</title>
+  <link rel="manifest" href="manifest.json" />
+  <link rel="apple-touch-icon" href="icon-192.png" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Shmulik M." />
+  <meta name="theme-color" content="#1e3a8a" />
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -111,6 +117,18 @@
     .link-label {
       display: flex;
       flex-direction: column;
+      min-width: 0;
+      overflow: hidden;
+    }
+
+    .link-label span {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .link-label span:first-child {
+      font-size: 14px;
     }
 
     .link-sub {
@@ -185,9 +203,37 @@
       </a>
     </div>
 
-    <a class="save-btn" href="data:text/vcard;charset=utf-8,BEGIN%3AVCARD%0AVERSION%3A3.0%0AN%3AMelamed%3BShmulik%3B%3B%3B%0AFN%3AShmulik%20Melamed%0AORG%3ADangot%20-%20A%20Division%20of%20OmniQ%0ATITLE%3AVP%20Sales%0ATEL%3BTYPE%3DCELL%3A%2B972545423278%0AEMAIL%3Ashmulik.melamed%40dangot.com%0AEND%3AVCARD" download="shmulik-melamed.vcf">
+    <a class="save-btn" href="#" onclick="saveContact(); return false;">
       ➕ Save to Contacts
     </a>
+
+    <script>
+    function saveContact() {
+      var vcard = [
+        "BEGIN:VCARD",
+        "VERSION:3.0",
+        "N:Melamed;Shmulik;;;",
+        "FN:Shmulik Melamed",
+        "ORG:Dangot - A Division of OmniQ",
+        "TITLE:VP Sales",
+        "TEL;TYPE=CELL:+972545423278",
+        "EMAIL:shmulik.melamed@dangot.com",
+        "END:VCARD"
+      ].join("\r\n");
+
+      var blob = new Blob([vcard], { type: "text/vcard;charset=utf-8" });
+      var url = URL.createObjectURL(blob);
+
+      // iOS Safari: navigate to blob URL directly
+      var a = document.createElement("a");
+      a.href = url;
+      a.download = "shmulik-melamed.vcf";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      setTimeout(function() { URL.revokeObjectURL(url); }, 1000);
+    }
+    </script>
 
     <div class="footer">dangot.com &nbsp;·&nbsp; OmniQ Group</div>
   </div>
